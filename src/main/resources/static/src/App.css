@@ -41,3 +41,15 @@
   max-width: 30%;
   margin: auto;
 }
+
+/* Új stílus a navigációs sávhoz */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.container-content {
+  margin-top: 70px; /* Igazítsd a margin-top értékét a navbar magasságához */
+}
