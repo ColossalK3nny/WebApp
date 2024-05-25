@@ -57,3 +57,5 @@ dist/
 # Cache fájlok kizárása
 src/main/resources/static/node_modules/
 
+data/testdb.mv.db
+data/testdb.trace.db
