@@ -1,9 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../App.css';
-import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const Dashboard = () => {
+    const [cars, setCars] = useState([]);
+
+    useEffect(() => {
+        fetchCars();
+    }, []);
+
+    const fetchCars = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/cars');
+            setCars(response.data);
+        } catch (error) {
+            console.error('Error fetching cars:', error);
+        }
+    };
+
     return (
         <div>
             <nav className="navbar navbar-light bg-body-tertiary fixed-top">
@@ -46,39 +61,19 @@ const Dashboard = () => {
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Toyota</td>
-                            <td>Corolla</td>
-                            <td>2020</td>
-                            <td>ABC-123</td>
-                            <td>15000</td>
-                            <td>15300</td>
-                            <td>2023-05-01</td>
-                            <td>2023-05-10</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Honda</td>
-                            <td>Civic</td>
-                            <td>2019</td>
-                            <td>XYZ-456</td>
-                            <td>22000</td>
-                            <td>22350</td>
-                            <td>2023-04-15</td>
-                            <td>2023-04-20</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Ford</td>
-                            <td>Focus</td>
-                            <td>2018</td>
-                            <td>AABX-789</td>
-                            <td>30000</td>
-                            <td>30500</td>
-                            <td>2023-03-10</td>
-                            <td>2023-03-15</td>
-                        </tr>
+                        {cars.map((car) => (
+                            <tr key={car.id}>
+                                <td>{car.id}</td>
+                                <td>{car.brand}</td>
+                                <td>{car.model}</td>
+                                <td>{car.year}</td>
+                                <td>{car.plateNumber}</td>
+                                <td>{car.mileageOut}</td>
+                                <td>{car.mileageIn}</td>
+                                <td>{car.dateOut}</td>
+                                <td>{car.dateIn}</td>
+                            </tr>
+                        ))}
                         </tbody>
                     </table>
                 </div>
