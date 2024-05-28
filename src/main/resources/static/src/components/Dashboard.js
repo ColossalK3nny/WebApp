@@ -10,7 +10,7 @@ const Dashboard = () => {
                 <div className="container-fluid">
                     <a className="navbar-brand" href="#">WebApp</a>
                     <div className="d-flex">
-                        <Link className="navbar-text me-3" to="/profile" style={{ color: 'gray', fontSize: '0.9em' }}>
+                        <Link className="navbar-text me-3" to="/profile" style={{ textDecoration: 'none', color: 'gray', fontSize: '15px' }}>
                             User Profile
                         </Link>
                         <form className="d-flex input-group w-auto">
