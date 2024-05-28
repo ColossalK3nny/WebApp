@@ -52,7 +52,7 @@ const Dashboard = () => {
                             <th>ID</th>
                             <th>Brand</th>
                             <th>Model</th>
-                            <th>Year</th>
+                            <th>Prod.Year</th>
                             <th>Plate Number</th>
                             <th>Mileage out</th>
                             <th>Mileage in</th>
@@ -66,7 +66,7 @@ const Dashboard = () => {
                                 <td>{car.id}</td>
                                 <td>{car.brand}</td>
                                 <td>{car.model}</td>
-                                <td>{car.year}</td>
+                                <td>{car.productionYear}</td>
                                 <td>{car.plateNumber}</td>
                                 <td>{car.mileageOut}</td>
                                 <td>{car.mileageIn}</td>

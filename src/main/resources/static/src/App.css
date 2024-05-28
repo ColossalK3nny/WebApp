@@ -53,3 +53,8 @@
 .container-content {
   margin-top: 70px; /* Igazítsd a margin-top értékét a navbar magasságához */
 }
+.table{
+  width: 100%;
+  align-content: center;
+
+}
