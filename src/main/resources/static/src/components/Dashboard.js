@@ -2,9 +2,22 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../App.css';
 import axios from 'axios';
+import { Modal, Button, Form } from 'react-bootstrap';
 
 const Dashboard = () => {
     const [cars, setCars] = useState([]);
+    const [show, setShow] = useState(false);
+    const [currentCar, setCurrentCar] = useState({
+        id: '',
+        brand: '',
+        model: '',
+        productionYear: '',
+        plateNumber: '',
+        mileageOut: '',
+        mileageIn: '',
+        dateOut: '',
+        dateIn: ''
+    });
 
     useEffect(() => {
         fetchCars();
@@ -16,6 +29,37 @@ const Dashboard = () => {
             setCars(response.data);
         } catch (error) {
             console.error('Error fetching cars:', error);
+        }
+    };
+
+    const handleUpdate = (car) => {
+        setCurrentCar(car);
+        setShow(true);
+    };
+
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`http://localhost:8080/cars/${id}`);
+            fetchCars();  // Refresh the car list
+        } catch (error) {
+            console.error('Error deleting car:', error);
+        }
+    };
+
+    const handleClose = () => setShow(false);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setCurrentCar({ ...currentCar, [name]: value });
+    };
+
+    const handleSave = async () => {
+        try {
+            await axios.put(`http://localhost:8080/cars/${currentCar.id}`, currentCar);
+            fetchCars();
+            handleClose();
+        } catch (error) {
+            console.error('Error updating car:', error);
         }
     };
 
@@ -42,22 +86,22 @@ const Dashboard = () => {
             </nav>
             <div className="container-content mt-5">
                 <h2>Welcome to the Car rental page</h2>
-                <p>This is the main page after login.</p>
 
                 <div className="container mt-5">
                     <h2>Car List</h2>
-                    <table className="table table-striped table-hover">
+                    <table className="table table-striped table-hover table-dark table-bordered">
                         <thead className="thead-dark">
                         <tr>
                             <th>ID</th>
                             <th>Brand</th>
                             <th>Model</th>
-                            <th>Prod.Year</th>
+                            <th>Prod. Year</th>
                             <th>Plate Number</th>
                             <th>Mileage out</th>
                             <th>Mileage in</th>
                             <th>Date out</th>
                             <th>Date in</th>
+                            <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -72,12 +116,116 @@ const Dashboard = () => {
                                 <td>{car.mileageIn}</td>
                                 <td>{car.dateOut}</td>
                                 <td>{car.dateIn}</td>
+                                <td>
+                                    <button
+                                        className="btn btn-primary btn-sm me-2"
+                                        onClick={() => handleUpdate(car)}
+                                    >
+                                        Update
+                                    </button>
+                                    <button
+                                        className="btn btn-danger btn-sm"
+                                        onClick={() => handleDelete(car.id)}
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
                             </tr>
                         ))}
                         </tbody>
                     </table>
                 </div>
             </div>
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Update {currentCar.brand} {currentCar.plateNumber}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Brand</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="brand"
+                                value={currentCar.brand}
+                                onChange={handleChange}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Model</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="model"
+                                value={currentCar.model}
+                                onChange={handleChange}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Production Year</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="productionYear"
+                                value={currentCar.productionYear}
+                                onChange={handleChange}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Plate Number</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="plateNumber"
+                                value={currentCar.plateNumber}
+                                onChange={handleChange}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Mileage Out</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="mileageOut"
+                                value={currentCar.mileageOut}
+                                onChange={handleChange}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Mileage In</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="mileageIn"
+                                value={currentCar.mileageIn}
+                                onChange={handleChange}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Date Out</Form.Label>
+                            <Form.Control
+                                type="date"
+                                name="dateOut"
+                                value={currentCar.dateOut}
+                                onChange={handleChange}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Date In</Form.Label>
+                            <Form.Control
+                                type="date"
+                                name="dateIn"
+                                value={currentCar.dateIn}
+                                onChange={handleChange}
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={handleSave}>
+                        Save Changes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
