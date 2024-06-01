@@ -46,7 +46,20 @@ const Dashboard = () => {
         }
     };
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        setShow(false);
+        setCurrentCar({
+            id: '',
+            brand: '',
+            model: '',
+            productionYear: '',
+            plateNumber: '',
+            mileageOut: '',
+            mileageIn: '',
+            dateOut: '',
+            dateIn: ''
+        });
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -55,11 +68,15 @@ const Dashboard = () => {
 
     const handleSave = async () => {
         try {
-            await axios.put(`http://localhost:8080/cars/${currentCar.id}`, currentCar);
+            if (currentCar.id) {
+                await axios.put(`http://localhost:8080/cars/${currentCar.id}`, currentCar);
+            } else {
+                await axios.post('http://localhost:8080/cars/add', currentCar);
+            }
             fetchCars();
             handleClose();
         } catch (error) {
-            console.error('Error updating car:', error);
+            console.error('Error saving car:', error);
         }
     };
 
@@ -67,7 +84,7 @@ const Dashboard = () => {
         <div>
             <nav className="navbar navbar-light bg-body-tertiary fixed-top">
                 <div className="container-fluid">
-                    <a className="navbar-brand" href="#">WebApp</a>
+                    <a className="navbar-brand" href="#">Car Rental</a>
                     <div className="d-flex">
                         <form className="d-flex input-group w-auto">
                             <input
@@ -89,8 +106,11 @@ const Dashboard = () => {
 
                 <div className="container mt-5">
                     <h2>Car List</h2>
-                    <table className="table table-striped table-hover table-dark table-bordered">
-                        <thead className="thead-dark">
+                    <button className="btn btn-success btn-sm mb-3" onClick={() => setShow(true)}>
+                        Add Car
+                    </button>
+                    <table className="table table-striped table-responsive table-dark table-bordered">
+                        <thead className="thead-light">
                         <tr>
                             <th>ID</th>
                             <th>Brand</th>
@@ -139,7 +159,7 @@ const Dashboard = () => {
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Update {currentCar.brand} {currentCar.plateNumber}</Modal.Title>
+                    <Modal.Title>{currentCar.id ? `Update Car ${currentCar.plateNumber}` : 'Add Car'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>

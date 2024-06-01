@@ -48,13 +48,18 @@
   top: 0;
   width: 100%;
   z-index: 1000;
+  border-radius: 70px;
+  margin-top: 15px;
 }
 
 .container-content {
-  margin-top: 70px; /* Igazítsd a margin-top értékét a navbar magasságához */
+  margin-top: 70px;
+  margin-left: auto;
+  margin-right: auto;
 }
-.table{
-  width: 100%;
-  align-content: center;
+.table-responsive {
+  overflow-x: auto;
+  margin: 0 auto;
+}
 
-}
+
