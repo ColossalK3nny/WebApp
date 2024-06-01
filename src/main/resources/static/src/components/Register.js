@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../App.css';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -20,6 +22,7 @@ const Register = () => {
             });
             if (response.ok) {
                 setMessage('User registered successfully!');
+                navigate('/login'); // Navigálás a bejelentkezési oldalra sikeres regisztráció után
             } else {
                 const errorData = await response.json();
                 setMessage(`Failed to register user: ${errorData.message}`);
@@ -65,6 +68,9 @@ const Register = () => {
                         <button type="submit" className="btn btn-primary">Register</button>
                     </form>
                     {message && <p className="mt-3">{message}</p>}
+                    <button onClick={() => navigate('/login')} className="btn btn-secondary mt-3">
+                        Login
+                    </button>
                 </div>
             </div>
         </div>
